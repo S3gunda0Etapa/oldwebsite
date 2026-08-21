@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แสนสุขสมาร์ทแคร์พลัส</title>
+    <style>
+        :root {
+            --primary: #087f8c;
+            --primary2: #0b6670;
+            --soft: #eaf7f7;
+            --gold: #d5a642;
+            --ink: #18344a;
+            --muted: #718393;
+            --bg: #f5f8fa;
+            --white: #fff;
+            --danger: #c94b4b
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: "Noto Sans Thai", Tahoma, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--ink)
+        }
+
+        button,
+        input,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh
+        }
+
+        .screen.active {
+            display: block
+        }
+
+        .topbar {
+            background: linear-gradient(135deg, var(--primary2), var(--primary));
+            color: #fff;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 4px 18px #0002
+        }
+
+        .brand {
+            font-weight: 900;
+            font-size: 21px
+        }
+
+        .brand small {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            opacity: .85;
+            margin-top: 3px
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: auto;
+            padding: 28px 6% 50px
+        }
+
+        .auth-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            background: linear-gradient(145deg, #e9f6f6, #f8fafb)
+        }
+
+        .auth-card {
+            width: min(460px, 100%);
+            background: #fff;
+            border-radius: 28px;
+            padding: 34px;
+            box-shadow: 0 20px 55px #17324d18
+        }
+
+        .logo-mark {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            background: linear-gradient(145deg, var(--primary), #56b8b0);
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 30px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 22px #087f8c33
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0 0 8px
+        }
+
+        h2 {
+            margin: 0 0 8px
+        }
+
+        h3 {
+            margin-top: 0
+        }
+
+        .subtitle {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-top: 0
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 13px;
+            padding: 13px 18px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 6px 15px #087f8c22
+        }
+
+        .btn.secondary {
+            background: #edf7f7;
+            color: var(--primary);
+            box-shadow: none
+        }
+
+        .btn.gold {
+            background: var(--gold);
+            color: #fff
+        }
+
+        .btn.full {
+            width: 100%;
+            margin-top: 8px
+        }
+
+        .btn.link {
+            background: none;
+            color: var(--primary);
+            box-shadow: none;
+            padding: 8px
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d9e3e8;
+            border-radius: 12px;
+            background: #fff;
+            margin: 7px 0 15px;
+            outline: none
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #087f8c14
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #9aa8b2;
+            margin: 18px 0
+        }
+
+        .divider:before,
+        .divider:after {
+            content: "";
+            height: 1px;
+            background: #e3eaee;
+            flex: 1
+        }
+
+        .thaID {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e0e8ec;
+            border-radius: 14px;
+            padding: 13px;
+            background: #fafcfc;
+            font-weight: 800
+        }
+
+        .thai-symbol {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #111;
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 12px
+        }
+
+        .consent {
+            background: #fff;
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 15px 40px #17324d12;
+            max-width: 760px;
+            margin: 7vh auto
+        }
+
+        .notice {
+            background: #fff8e7;
+            border-left: 4px solid var(--gold);
+            padding: 15px;
+            border-radius: 10px;
+            color: #6f5a28;
+            line-height: 1.7
+        }
+
+        .check {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin: 18px 0
+        }
+
+        .check input {
+            width: 18px;
+            margin: 3px 0
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #e7f7f6, #fff);
+            border-radius: 24px;
+            padding: 28px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 22px
+        }
+
+        .hero-icon {
+            font-size: 58px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px
+        }
+
+        .grid4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 8px 25px #17324d0d;
+            border: 1px solid #edf1f3
+        }
+
+        .menu-card {
+            min-height: 145px;
+            transition: .15s
+        }
+
+        .menu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px #17324d16
+        }
+
+        .icon {
+            font-size: 34px;
+            margin-bottom: 10px
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800
+        }
+
+        .waiting {
+            background: #fff2ce;
+            color: #9b6d00
+        }
+
+        .doing {
+            background: #dff1ff;
+            color: #16638a
+        }
+
+        .done {
+            background: #ddf5e7;
+            color: #18764c
+        }
+
+        .step {
+            display: flex;
+            gap: 14px;
+            margin: 18px 0
+        }
+
+        .stepnum {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--soft);
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            flex: none
+        }
+
+        .choice {
+            border: 2px solid #e4ebee;
+            border-radius: 17px;
+            padding: 18px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px
+        }
+
+        .choice.selected {
+            border-color: var(--primary);
+            background: #f0fbfb
+        }
+
+        .choice input {
+            width: auto;
+            margin: 0
+        }
+
+        .row {
+            display: flex;
+            gap: 12px
+        }
+
+        .row>* {
+            flex: 1
+        }
+
+        .progress {
+            height: 10px;
+            background: #e9eff2;
+            border-radius: 20px;
+            overflow: hidden
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #5dbbb2);
+            width: 65%
+        }
+
+        .timeline {
+            border-left: 3px solid #dcebec;
+            margin: 15px 0 20px 10px;
+            padding-left: 20px
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 0 0 20px
+        }
+
+        .timeline-item:before {
+            content: "";
+            position: absolute;
+            left: -29px;
+            top: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid #eaf7f7
+        }
+
+        .rating {
+            text-align: center;
+            padding: 18px
+        }
+
+        .stars {
+            font-size: 38px;
+            letter-spacing: 5px;
+            margin: 10px
+        }
+
+        .star {
+            cursor: pointer;
+            filter: grayscale(1);
+            opacity: .5
+        }
+
+        .star.active {
+            filter: none;
+            opacity: 1
+        }
+
+        .toast {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: #17344a;
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 13px;
+            display: none;
+            z-index: 50
+        }
+
+        @media(max-width:700px) {
+
+            .grid,
+            .grid4 {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+            .row {
+                flex-direction: column
+            }
+
+            .topbar {
+                padding: 15px 5%
+            }
+
+            .container {
+                padding: 22px 5%
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- AUTH -->
+    <section id="auth" class="screen active">
+        <div class="auth-wrap">
+            <div class="auth-card">
+                <div class="logo-mark">♡</div>
+                <h1>แสนสุขสมาร์ทแคร์พลัส</h1>
+                <p class="subtitle">ระบบบริการช่วยเหลือและอำนวยความสะดวกสำหรับประชาชนในแสนสุข</p>
+                <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:22px">
+                    <button class="btn" onclick="show('register')">สมัคร</button>
+                    <button class="btn secondary" onclick="show('login')">เข้าสู่ระบบ</button>
+                </div>
+                <p class="muted" style="font-size:13px;margin-top:25px">ระบบต้นแบบสำหรับนำเสนอแนวคิดการให้บริการ</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section id="register" class="screen">
+        <div class="auth-wrap">
+            <div class="auth-card">
+                <button class="btn link" onclick="show('auth')">← กลับ</button>
+                <h1>สมัครใช้งาน</h1>
+                <p class="subtitle">ยืนยันตัวตนเพื่อเข้าใช้บริการ</p>
+                <label>เลขบัตรประชาชน</label><input id="cid" maxlength="13" placeholder="กรอกเลข 13 หลัก">
+                <label>รหัสผ่าน</label><input type="password" placeholder="กำหนดรหัสผ่าน">
+                <button class="btn full" onclick="show('consent')">ยืนยัน</button>
+                <div class="divider">หรือ</div>
+                <button class="thaID full" onclick="show('consent')"><span class="thai-symbol">TH</span> สมัครด้วย
+                    THAID</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="login" class="screen">
+        <div class="auth-wrap">
+            <div class="auth-card">
+                <button class="btn link" onclick="show('auth')">← กลับ</button>
+                <h1>เข้าสู่ระบบ</h1>
+                <p class="subtitle">เข้าสู่ระบบเพื่อใช้บริการแสนสุขสมาร์ทแคร์พลัส</p>
+                <label>เลขบัตรประชาชน</label><input placeholder="กรอกเลข 13 หลัก">
+                <label>รหัสผ่าน</label><input type="password" placeholder="กรอกรหัสผ่าน">
+                <button class="btn full" onclick="show('consent')">เข้าสู่ระบบ</button>
+                <div class="divider">หรือ</div>
+                <button class="thaID full" onclick="show('consent')"><span class="thai-symbol">TH</span> เข้าสู่ระบบด้วย
+                    THAID</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONSENT -->
+    <section id="consent" class="screen">
+        <div class="container">
+            <div class="consent">
+                <h1>ความยินยอมในการใช้บริการ</h1>
+                <p class="subtitle">ก่อนเข้าใช้งาน กรุณาอ่านและยืนยันความยินยอม</p>
+                <div class="notice"><b>แจ้งให้ทราบ:</b> ระบบอาจเก็บข้อมูลที่จำเป็นต่อการสมัคร การจองคิว การติดตามสถานะ
+                    และการประเมินบริการ เช่น ข้อมูลบัญชี ข้อมูลการจอง และประวัติการใช้บริการ</div>
+                <div class="step">
+                    <div class="stepnum">1</div>
+                    <div>ข้อมูลจะถูกนำไปใช้เพื่อให้บริการและปรับปรุงระบบ</div>
+                </div>
+                <div class="step">
+                    <div class="stepnum">2</div>
+                    <div>ระบบจะเก็บข้อมูลเท่าที่จำเป็นตามวัตถุประสงค์ของบริการ</div>
+                </div>
+                <div class="step">
+                    <div class="stepnum">3</div>
+                    <div>ข้อมูลจะได้รับการดูแลตามนโยบายของหน่วยงาน</div>
+                </div>
+                <label class="check"><input type="checkbox"
+                        id="agree"><span>ข้าพเจ้าอ่านและยินยอมให้ระบบเก็บและใช้ข้อมูลที่จำเป็นตามรายละเอียดข้างต้น</span></label>
+                <button class="btn full" onclick="enterApp()">ยอมรับและเข้าสู่บริการ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- APP HOME -->
+    <section id="home" class="screen">
+        <header class="topbar">
+            <div class="brand">แสนสุขสมาร์ทแคร์พลัส<small>Smart Care Plus</small></div><button class="btn secondary"
+                onclick="show('auth')">ออกจากระบบ</button>
+        </header>
+        <div class="container">
+            <div class="hero">
+                <div>
+                    <div class="muted">ยินดีต้อนรับ</div>
+                    <h1>บริการของฉัน</h1>
+                    <p class="subtitle">เลือกบริการที่ต้องการได้จากเมนูด้านล่าง</p>
+                </div>
+                <div class="hero-icon">🏛️</div>
+            </div>
+            <div class="grid4">
+                <div class="card menu-card" onclick="show('booking')">
+                    <div class="icon">🚗</div>
+                    <h3>1. จองคิว</h3>
+                    <p class="muted">จองรถและผู้ติดตาม</p>
+                </div>
+                <div class="card menu-card" onclick="show('tracking')">
+                    <div class="icon">📍</div>
+                    <h3>2. ติดตาม</h3>
+                    <p class="muted">ติดตามรถและผู้ติดตาม</p>
+                </div>
+                <div class="card menu-card" onclick="show('rating')">
+                    <div class="icon">⭐</div>
+                    <h3>3. ประเมิน</h3>
+                    <p class="muted">ประเมินคุณภาพการบริการ</p>
+                </div>
+                <div class="card menu-card" onclick="show('history')">
+                    <div class="icon">📋</div>
+                    <h3>4. ประวัติการใช้บริการ</h3>
+                    <p class="muted">ดูรายการจองและการใช้บริการย้อนหลัง</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking" class="screen">
+        <header class="topbar">
+            <div class="brand">จองคิว</div><button class="btn secondary" onclick="show('home')">หน้าหลัก</button>
+        </header>
+        <div class="container">
+            <div class="card">
+                <h2>เลือกบริการ</h2>
+                <p class="muted">เลือกประเภทรถที่ต้องการ</p>
+                <div class="choice selected" onclick="selectVehicle('car',this)">
+                    <div><b>🚗 รถเก๋ง</b>
+                        <div class="muted">สำหรับเดินทางทั่วไป</div>
+                    </div><input type="radio" name="vehicle" checked>
+                </div>
+                <div class="choice" onclick="selectVehicle('ambulance',this)">
+                    <div><b>🚑 รถพยาบาล</b>
+                        <div class="muted">สำหรับกรณีที่ต้องการการดูแลด้านการเดินทาง</div>
+                    </div><input type="radio" name="vehicle">
+                </div>
+                <div id="carOptions">
+                    <h3 style="margin-top:25px">ผู้ติดตาม</h3>
+                    <div class="choice">
+                        <div>ต้องการผู้ติดตาม</div><input type="checkbox" id="companion">
+                    </div>
+                    <div class="row">
+                        <div><label>เพศผู้ติดตาม</label><select>
+                                <option>ไม่ระบุ</option>
+                                <option>ชาย</option>
+                                <option>หญิง</option>
+                            </select></div>
+                    </div>
+                </div>
+                <button class="btn full" onclick="show('review')">ไปต่อ → ทวนรายการ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEW -->
+    <section id="review" class="screen">
+        <header class="topbar">
+            <div class="brand">ทวนรายการจอง</div><button class="btn secondary" onclick="show('home')">หน้าหลัก</button>
+        </header>
+        <div class="container">
+            <div class="card">
+                <h2>รายละเอียดการจอง</h2>
+                <p>🚗 รถ: <b id="reviewVehicle">รถเก๋ง</b></p>
+                <p>👤 ผู้ติดตาม: <b id="reviewCompanion">รอเลือก</b></p>
+                <div class="row">
+                    <div><label>วันที่</label><input type="date" id="date"></div>
+                    <div><label>เวลา</label><input type="time" id="time"></div>
+                </div>
+                <h3>สถานะคิว</h3>
+                <div class="grid">
+                    <div class="card"><b>ผู้ติดตาม</b><br><span class="status waiting">ผู้ติดตาม…รอ</span></div>
+                    <div class="card"><b>รถเก๋ง</b><br><span class="status waiting">รถเก๋ง…รอ</span></div>
+                </div>
+                <button class="btn full" onclick="confirmBooking()">ยืนยันการจอง</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PENDING -->
+    <section id="pending" class="screen">
+        <div class="auth-wrap">
+            <div class="auth-card" style="text-align:center">
+                <div class="logo-mark" style="margin:0 auto 18px">✓</div>
+                <h1>รอดำเนินการ</h1>
+                <p class="subtitle">ระบบได้รับคำขอจองของคุณแล้ว<br>เจ้าหน้าที่กำลังตรวจสอบและจัดสรรบริการ</p>
+                <div class="progress"><span></span></div>
+                <p class="muted">สถานะปัจจุบัน: <b>รอดำเนินการ</b></p>
+                <button class="btn full" onclick="show('tracking')">ติดตามสถานะ</button>
+                <button class="btn secondary full" onclick="show('home')">กลับหน้าหลัก</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRACKING MENU -->
+    <section id="tracking" class="screen">
+        <header class="topbar">
+            <div class="brand">ติดตาม</div><button class="btn secondary" onclick="show('home')">หน้าหลัก</button>
+        </header>
+        <div class="container">
+            <h1>ติดตามบริการ</h1>
+            <p class="subtitle">เลือกสิ่งที่ต้องการดำเนินการ</p>
+            <div class="grid">
+                <div class="card menu-card" onclick="show('status')">
+                    <div class="icon">📍</div>
+                    <h2>ติดตามสถานะ</h2>
+                    <p class="muted">ดูสถานะรถ ผู้ติดตาม และประวัติ</p>
+                </div>
+                <div class="card menu-card" onclick="show('applyCompanion')">
+                    <div class="icon">🤝</div>
+                    <h2>สมัครเป็นผู้ติดตาม</h2>
+                    <p class="muted">สมัครเพื่อช่วยเหลือผู้ใช้บริการ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATUS -->
+    <section id="status" class="screen">
+        <header class="topbar">
+            <div class="brand">ติดตามสถานะ</div><button class="btn secondary" onclick="show('tracking')">กลับ</button>
+        </header>
+        <div class="container">
+            <div class="grid">
+                <div class="card">
+                    <h3>🚗 รถ</h3>
+                    <p><span class="status waiting">รอ</span></p>
+                    <div class="progress"><span style="width:35%"></span></div>
+                </div>
+                <div class="card">
+                    <h3>👤 ผู้ติดตาม</h3>
+                    <p><span class="status doing">กำลังดำเนินการ</span></p>
+                    <div class="progress"><span style="width:65%"></span></div>
+                </div>
+            </div>
+            <div class="card" style="margin-top:18px">
+                <h3>ประวัติผู้ติดตามที่เลือก</h3>
+                <div class="timeline">
+                    <div class="timeline-item"><b>ผู้ติดตาม: คุณสมชาย</b><br><span
+                            class="muted">ยืนยันการรับงานแล้ว</span></div>
+                    <div class="timeline-item"><b>นัดหมาย</b><br><span class="muted">20 ส.ค. 2026 เวลา 09:00 น.</span>
+                    </div>
+                    <div class="timeline-item"><b>ปลายทาง</b><br><span class="muted">โรงพยาบาลใกล้บ้าน</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPLY COMPANION -->
+    <section id="applyCompanion" class="screen">
+        <header class="topbar">
+            <div class="brand">สมัครเป็นผู้ติดตาม</div><button class="btn secondary"
+                onclick="show('tracking')">กลับ</button>
+        </header>
+        <div class="container">
+            <div class="card">
+                <div class="thaID"><span class="thai-symbol">TH</span>
+                    <div><b>ยืนยันตัวตนด้วย THAID</b>
+                        <div class="muted">ใช้เพื่อยืนยันตัวตนก่อนสมัคร</div>
+                    </div>
+                </div>
+                <h2 style="margin-top:25px">เงื่อนไขการสมัคร</h2>
+                <ul style="line-height:2">
+                    <li>ต้องยืนยันตัวตนผ่าน THAID</li>
+                    <li>ต้องเป็นผู้ที่ไม่มีประวัติการกระทำผิดตามเงื่อนไขของหน่วยงาน</li>
+                    <li>ต้องให้ข้อมูลที่ถูกต้องและสามารถติดต่อได้</li>
+                    <li>ต้องปฏิบัติตามแนวทางการดูแลผู้ใช้บริการ</li>
+                </ul>
+                <label class="check"><input type="checkbox"
+                        id="compAgree"><span>ข้าพเจ้าอ่านและยอมรับเงื่อนไขการสมัครเป็นผู้ติดตาม</span></label>
+                <button class="btn full" onclick="applyCompanion()">ยืนยันการสมัคร</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- RATING -->
+    <section id="rating" class="screen">
+        <header class="topbar">
+            <div class="brand">ประเมินการบริการ</div><button class="btn secondary"
+                onclick="show('home')">หน้าหลัก</button>
+        </header>
+        <div class="container">
+            <div class="card rating">
+                <div class="icon">⭐</div>
+                <h1>ประเมินผู้ให้บริการ</h1>
+                <p class="subtitle">ให้คะแนนประสบการณ์ของคุณ คล้ายการประเมินไรเดอร์</p>
+                <div class="stars" id="stars">
+                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span
+                        class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span><span
+                        class="star" onclick="rate(5)">★</span>
+                </div>
+                <p id="ratingText" class="muted">แตะดาวเพื่อให้คะแนน</p>
+                <label style="display:block;text-align:left">ความคิดเห็นเพิ่มเติม</label>
+                <textarea id="comment" rows="5" placeholder="บริการเป็นอย่างไรบ้าง?"></textarea>
+                <button class="btn full" onclick="submitRating()">ส่งการประเมิน</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history" class="screen">
+        <header class="topbar">
+            <div class="brand">ประวัติการใช้บริการ</div><button class="btn secondary"
+                onclick="show('home')">หน้าหลัก</button>
+        </header>
+        <div class="container">
+            <h1>ประวัติของฉัน</h1>
+            <div class="card">
+                <div class="choice">
+                    <div><b>20 ส.ค. 2026</b>
+                        <div class="muted">รถเก๋ง • ผู้ติดตาม</div>
+                    </div><span class="status done">เสร็จ</span>
+                </div>
+                <div class="choice">
+                    <div><b>5 ส.ค. 2026</b>
+                        <div class="muted">รถเก๋ง</div>
+                    </div><span class="status done">เสร็จ</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        function enterApp() {
+            if (!document.getElementById('agree').checked) { alert('กรุณากดยอมรับความยินยอมก่อน'); return }
+            show('home');
+        }
+        let vehicle = 'car';
+        function selectVehicle(v, el) {
+            vehicle = v;
+            document.querySelectorAll('.choice').forEach(x => { if (x.parentElement.id !== 'carOptions') { } });
+            document.querySelectorAll('#booking .choice').forEach(x => x.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('carOptions').style.display = v === 'car' ? 'block' : 'none';
+        }
+        function confirmBooking() {
+            if (!document.getElementById('date').value || !document.getElementById('time').value) { alert('กรุณาเลือกวันที่และเวลา'); return }
+            show('pending');
+        }
+        function applyCompanion() {
+            if (!document.getElementById('compAgree').checked) { alert('กรุณายอมรับเงื่อนไขก่อน'); return }
+            toast('ส่งคำขอสมัครเป็นผู้ติดตามแล้ว');
+        }
+        let currentRate = 0;
+        function rate(n) {
+            currentRate = n;
+            document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('active', i < n));
+            document.getElementById('ratingText').textContent = 'คุณให้ ' + n + ' ดาว';
+        }
+        function submitRating() {
+            if (!currentRate) { alert('กรุณาให้คะแนนก่อน'); return }
+            toast('ขอบคุณสำหรับการประเมินบริการ');
+        }
+        function toast(t) {
+            const el = document.getElementById('toast'); el.textContent = t; el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 2500);
+        }
+    </script>
+</body>
+
+</html>
